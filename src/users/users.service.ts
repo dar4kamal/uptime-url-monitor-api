@@ -1,10 +1,11 @@
 import {
   Injectable,
   ConflictException,
-  BadRequestException,
   NotFoundException,
+  BadRequestException,
 } from '@nestjs/common';
 import { Model } from 'mongoose';
+import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { User } from './users.schema';
@@ -21,6 +22,7 @@ export class UsersService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
     private alertService: AlertService,
+    private jwtService: JwtService,
   ) {
     this.alertService.setProvider(AlertType.Email);
   }
@@ -76,8 +78,7 @@ export class UsersService {
     if (!toBeCheckedUser.isVerified)
       throw new BadRequestException('Please Verify Your Email First');
 
-    // TODO generate JWT Token
-    return 'Token';
+    return this.jwtService.sign({ id: toBeCheckedUser.id });
   }
 
   async verifyCode(userId: string, token: string) {
