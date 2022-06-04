@@ -8,6 +8,7 @@ import { AppController } from './app.controller';
 
 import { UsersModule } from './users/users.module';
 import { AlertModule } from './alert/alert.module';
+import { ChecksModule } from './checks/checks.module';
 
 import { UniversalExceptionFilter } from './utils/universal.filter';
 import { TransformInterceptor } from './utils/transform.interceptor';
@@ -18,6 +19,7 @@ import { TransformInterceptor } from './utils/transform.interceptor';
     MongooseModule.forRoot('mongodb://localhost/url-monitor'),
     UsersModule,
     AlertModule,
+    ChecksModule,
   ],
   controllers: [AppController],
   providers: [
