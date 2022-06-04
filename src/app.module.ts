@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { AppController } from './app.controller';
 
 import { UsersModule } from './users/users.module';
+import { AlertModule } from './alert/alert.module';
 
 import { UniversalExceptionFilter } from './utils/universal.filter';
 import { TransformInterceptor } from './utils/transform.interceptor';
@@ -16,6 +17,7 @@ import { TransformInterceptor } from './utils/transform.interceptor';
     ConfigModule.forRoot(),
     MongooseModule.forRoot('mongodb://localhost/url-monitor'),
     UsersModule,
+    AlertModule,
   ],
   controllers: [AppController],
   providers: [
