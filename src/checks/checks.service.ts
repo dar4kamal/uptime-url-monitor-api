@@ -1,14 +1,19 @@
 import { Model } from 'mongoose';
-import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { Check } from './checks.schema';
 import AddCheckDTO from './dto/addCheck.dto';
 import { User } from 'src/users/users.schema';
 
+import { AxiosService } from 'src/axios/axios.service';
+
 @Injectable()
 export class ChecksService {
-  constructor(@InjectModel(Check.name) private checkModel: Model<Check>) {}
+  constructor(
+    @InjectModel(Check.name) private checkModel: Model<Check>,
+    private axiosService: AxiosService,
+  ) {}
 
   async addCheck(checkDetails: AddCheckDTO, userDetails: User) {
     const {
@@ -28,15 +33,37 @@ export class ChecksService {
       authentication,
     } = checkDetails;
 
-    const { id } = userDetails;
+    const newCheck = new this.checkModel({
+      ...checkDetails,
+      userId: userDetails.id,
+    });
 
-    const newCheck = new this.checkModel({ ...checkDetails, userId: id });
-    // TODO create a report record
-    // TODO create cron job
-    // TODO check webhook => within cron
-    // TODO check assert => within cron
-    await newCheck.save();
+    try {
+      // TODO create cron job
+      await newCheck.save();
 
-    return 'a check has been created successfully';
+      await this.axiosService.request(
+        {
+          url,
+          path,
+          port,
+          assert,
+          webhook,
+          timeout,
+          interval,
+          protocol,
+          ignoreSSL,
+          threshold,
+          httpHeaders,
+          authentication,
+        },
+        { userId: userDetails.id, checkId: newCheck.id },
+      );
+
+      return 'Your check has been created successfully';
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException(error.message);
+    }
   }
 }

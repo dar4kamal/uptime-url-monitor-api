@@ -8,7 +8,9 @@ import { AppController } from './app.controller';
 
 import { UsersModule } from './users/users.module';
 import { AlertModule } from './alert/alert.module';
+import { AxiosModule } from './axios/axios.module';
 import { ChecksModule } from './checks/checks.module';
+import { ReportsModule } from './reports/reports.module';
 
 import { UniversalExceptionFilter } from './utils/universal.filter';
 import { TransformInterceptor } from './utils/transform.interceptor';
@@ -20,6 +22,8 @@ import { TransformInterceptor } from './utils/transform.interceptor';
     UsersModule,
     AlertModule,
     ChecksModule,
+    AxiosModule,
+    ReportsModule,
   ],
   controllers: [AppController],
   providers: [

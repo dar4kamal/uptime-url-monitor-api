@@ -1,24 +1,8 @@
 import { Document, Schema as MongooseSchema } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-export enum ProtocolOptions {
-  HTTP = 'http',
-  HTTPS = 'https',
-  TCP = 'tcp',
-}
-
-export interface URLAuth {
-  username: string;
-  password: string;
-}
-
-export interface HTTPHeaders {
-  [key: string]: string;
-}
-
-export interface AssertStatusCode {
-  statusCode: number;
-}
+import { ProtocolOptions } from 'src/axios/enums';
+import { URLAuth, HTTPHeaders, AssertStatusCode } from 'src/axios/interfaces';
 
 @Schema({ versionKey: false })
 export class Check extends Document {
@@ -61,7 +45,7 @@ export class Check extends Document {
   authentication?: URLAuth;
 
   @Prop({ type: [{ type: Map, of: String }] })
-  httpHeaders?: HTTPHeaders;
+  httpHeaders?: HTTPHeaders[];
 
   @Prop({ type: { statusCode: Number } })
   assert?: AssertStatusCode;
